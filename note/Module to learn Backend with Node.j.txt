@@ -1,0 +1,1085 @@
+Module to learn: Backend with Node.js & Express 
+
+CLASSES: 10 classes 
+
+KEY OUTCOME: HTTP, REST APIs, databases, authentication 
+
+CAPSTONE PROJECT: Full CRUD API with connected frontend
+
+
+
+=====================================================================
+
+Module: Backend with Node.js & Express, understand 
+
+The goal will be to understand: Frontend → HTTP Request → Express Server → Database 
+→ Response → Frontend (that is HTTP, REST APIs, databases and authentication) and
+there will be a project on Full CRUD API with connected frontend (Full CRUD API with connected frontend)
+
+
+OVERVIEW
+
+What backend development means
+Node.js
+npm
+Express.js
+HTTP
+HTTP methods
+REST APIs
+Routes
+JSON
+CRUD
+Databases
+Authentication
+Connecting frontend to backend
+API testing
+Basic backend security
+
+Deploying a backend
+
+i. Capstone: Student Task Manager API
+
+The student builds:
+
+Register
+Login
+Create task
+View tasks
+View one task
+Update task
+Delete task
+Connect API to frontend
+Store data in database
+
+========================================================================================
+
+
+NODE JS, EXPRESS and Database (PostgreSQL)
+
+========================================================================================
+
+
+S/N	Technologies	What it does					         Meaning
+
+i.	Node.js		It Runs JavaScript outside the browser		The engine
+
+ii.	Express.js	It Builds the web server and API routes		The server
+
+iii.PostgreSQL	It Stores and manages data	        		The database/storage
+
+
+
+A.  Node.js
+
+Node.js is a free, open-source JavaScript runtime that runs on Windows, Mac, Linux, and more.
+
+- It execute JavaScript code outside of a web browser, and enable server-side development with JavaScript.
+
+- Built on Chrome's V8 JavaScript engine, and Node.js is designed for building scalable network
+ applications efficiently.
+
+
+Installation
+
+Install the LTS version of Node.js
+
+Node.js will give us:
+
+- Node runtime
+- npm
+- ability to run JavaScript outside the browser
+
+
+Link:  https://nodejs.org/en/download
+
+
+
+After installation check the version in VS Code terminal by typing: node --version and npm --version
+
+
+
+What is npm (Node Package Manager)
+
+It allows developers to install packages.
+
+
+
+B. Express Server
+
+An Express Server is a backend application built with Node.js and the Express framework that listens 
+for requests from clients (such as a browser or mobile app) and sends responses back.
+
+
+=======================================
+
+BACKEND PROJECT CREATION
+
+=======================================
+Create a folder for the NODE JS, EXPRESS and Database (PostgreSQL)
+
+
+Call it: backend-project and open it with VS Code
+
+
+Steps to deploy the server
+
+i. open terminal in vs code
+
+
+ii. type: npm init -y
+
+- This will create:
+
+backend-project/
+└── package.json
+
+
+iii. Install Express in VS Code terminal 
+
+- Run: npm install express
+
+- To check express version, if installed, use: npm list express
+
+
+iv. After installing express, you will have:
+
+backend-project/
+├── node_modules/
+├── package-lock.json
+└── package.json
+
+
+v. Create the FIRST backend file
+
+- right-click your project folder called backend-project:
+
+- choose New File, create app.js
+
+
+Your work structure becomes:
+
+backend-project/
+├── node_modules/
+├── package-lock.json
+├── package.json
+└── app.js
+
+
+C. Database (PostgreSQL)
+
+PostgreSQL is a relational database system used to store and retrieve data.
+
+
+- Install PostgreSQL software, link: https://www.postgresql.org/download/windows/
+
+- Install PostgreSQL Extension by  Microsoft in VCS Code
+
+- In terminal, use: npm install express pg
+
+
+This installs two packages at the same time, which are: Express and pg
+
+To check PostgreSQL version use: psql --version
+
+
+Or check package.json, You should see:
+
+"dependencies": {
+  "express": "^5.x.x",
+  "pg": "^8.23.0"
+}
+
+
+
+PostgreSQL - Database  CREATION
+
+Open pgAdmin that is PostgreSQL Software and Connect to PostgreSQL with your Master Password 
+you used during installation.
+
+
+i. Create the database
+
+On the left side, expand:
+
+Servers
+└── PostgreSQL 18
+    ├── Databases
+    ├── Login/Group Roles
+    └── Tablespaces
+
+
+ii. Right-click: Databases, Then select: Create → Database...
+
+You will see a window,
+then enter the below details:
+
+Database: school_db
+Owner:    postgres
+
+Then click: Save
+
+
+
+iii. Create student table in the Database (school_db)
+
+- Right-click: school_db and select: Query Tool (A SQL editor will open.)
+
+- Input the sql code
+
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    phone VARCHAR(20),
+    age INTEGER,
+    gender VARCHAR(20),
+    class_name VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+Then click the Execute script button (▶), You should get a successful execution message.
+
+
+iv. Check your table, On the left side, refresh/expand:
+
+Clicking steps
+
+school_db (database)
+    ↓
+Schemas
+    ↓
+public
+    ↓
+Tables (students)
+
+
+
+Other VS Code extensions to install:
+
+- ESLint
+- Prettier - Code formatter
+- JavaScript (ES6) code snippets
+- Thunder Client (It allows APIs Testing) 
+
+
+Note: 
+
+i.	Node.js = runs the backend
+ii.	Express.js = handles requests/routes
+iii.	PostgreSQL = stores the data
+iv.	pg = connects Node.js to PostgreSQL
+
+
+
+Public folder
+
+The public folder is where you put files that the browser needs to access, which are:
+HTML, CSS, JavaScript, and Images etc.
+
+
+
+
+Example 1: Creating connection in app.js
+
+const express = require("express");
+const { Client } = require("pg");
+
+const app = express();
+
+const PORT = 3000;
+
+// Connect to PostgreSQL
+const db = new Client({
+    host: "localhost",
+    user: "postgres",
+    password: "TOM",
+    database: "student_db",
+    port: 5050
+});
+
+
+// Test PostgreSQL connection
+db.connect((err) => {
+    if (err) {
+        console.log("PostgreSQL connection failed!");
+        console.log(err.message);
+        return;
+    }
+
+    console.log("PostgreSQL connected successfully!");
+});
+
+
+// Home route
+app.get("/", (req, res) => {
+    res.send("Node.js + Express + PSQL is working!");
+});
+
+
+// Get students
+app.get("/students", (req, res) => {
+
+    db.query("SELECT * FROM students", (err, result) => {
+
+        if (err) {
+            console.log(err);
+            return res.status(500).send("Database error");
+        }
+
+        res.json(result.rows);
+    });
+
+});
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
+
+
+
+Then run: node app.js   
+
+You will see Server running at http://localhost:3000
+
+and the result will be: Node.js + Express + PSQL is working!
+
+
+
+Example 2: 
+
+
+
+Run: node app.js
+
+
+PostgreSQL connected successfully!
+Server running at http://localhost:3000
+
+Then go to:
+
+http://localhost:3000/register
+
+
+HTTP Methods
+
+There are four methods that are especially important for this course.
+
+Method	            Meaning	Database Operation
+GET	                Get information	SELECT
+POST    	        Add information	INSERT
+
+UPDATE: 1. PUT     	Change information	UPDATE for a particular id
+        2. PATCH    Change information	UPDATE for all ids at once
+
+DELETE  	        Remove information	DELETE
+
+
+Post example:
+
+const express = require("express");
+
+const app = express();
+
+app.use(express.json());
+
+
+// POST REQUEST
+// Used to create/send new data
+
+app.post("/students", (req, res) => {
+
+    // Get the name sent by the user
+    const name = req.body.name;
+
+    // Send a response back
+    res.json({
+        message: "Student added successfully",
+        studentName: name
+    });
+
+});
+
+
+// Start server
+app.listen(3000, () => {
+    console.log("Server running at http://localhost:3000");
+});
+
+
+Test it
+
+o/p
+
+http://localhost:3000/students
+
+Go to:
+
+Body → raw → JSON
+
+Send:
+
+{
+    "name": "Mary"
+}
+Response
+
+You should get:
+
+{
+    "message": "Student added successfully",
+    "studentName": "Mary"
+}
+Simple explanation
+app.post("/students", ...)
+
+means:
+
+When someone sends a POST request to /students, run this code.
+
+This:
+
+req.body.name
+
+gets the name sent by the user.
+
+This:
+
+res.json(...)
+
+sends a response back to the user.
+
+POST = Send/Create data.
+
+
+
+Understanding Requests and Routes
+
+A request can be thought of as:
+
+CLIENT / USER
+   |
+   | HTTP REQUEST (get)
+   |
+   v
+EXPRESS SERVER
+   |
+   | Finds matching ROUTE
+   |
+   v
+ROUTE HANDLER
+   |
+   | HTTP RESPONSE (post)
+   |
+   v
+CLIENT /USER
+
+
+
+
+A. PUT Request
+
+The PUT method is normally used when you want to update an existing resource.
+
+Our route is:
+
+app.put("/students/:id", (req, res) => {
+
+For example:
+
+PUT http://localhost:3000/students/2
+
+The 2 is the student's ID.
+
+We can send this JSON:
+
+{
+    "name": "John Updated",
+    "age": 15,
+    "course": "Express.js"
+}
+
+
+
+
+The student originally has:
+
+Before the update (put):
+{
+    "id": 2,
+    "name": "John",
+    "age": 14,
+    "course": "JavaScript"
+}
+
+
+After the update (PUT) request:
+
+{
+    "id": 2,
+    "name": "John Updated",
+    "age": 15,
+    "course": "Express.js"
+
+
+
+
+
+Where Does req.params Come From?
+
+Consider:
+
+PUT /students/2
+
+Our route is:
+
+app.put("/students/:id", ...)
+
+
+The :id is a route parameter.
+
+We access it with:
+
+req.params.id
+
+Therefore:
+
+const id = Number(req.params.id);
+
+
+gives:
+
+2
+
+
+B. DELETE Request
+
+The DELETE method is used to remove a resource.
+
+Our route:
+
+app.delete("/students/:id", (req, res) => {
+
+To delete student 3:
+
+DELETE http://localhost:3000/students/3
+
+The server gets:
+
+req.params.id
+
+which is:
+
+3
+
+Then we find the student:
+
+const studentIndex = students.findIndex(
+    student => student.id === id
+);
+
+And remove the student:
+
+students.splice(studentIndex, 1);
+
+===============================================================================
+4th class
+
+4th Class  - REST API, JSON, GET & POST WITH POSTGRESQL
+We are going to use: app.js, db.js and public/index.html
+
+
+On postgreSQL
+
+- Always show your port first by using: SHOW port;
+
+- DATABASE NAME school_db
+
+
+a.
+
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    age INTEGER,
+    course VARCHAR(100),
+    email VARCHAR(150)
+);
+
+
+b. 
+
+INSERT INTO students (name, age, course, email)
+VALUES
+('Amara Johnson', 12, 'JavaScript', 'amara@abc.com'),
+('Daniel Smith', 13, 'Node.js', 'daniel@abc.com');
+
+
+
+
+
+REST API, JSON, GET & POST WITH POSTGRESQL
+
+Building a REST API with Node.js, Express and PostgreSQL
+
+This topic talks on: 
+
+1. Understand APIs and REST APIs
+
+2. Understand JSON
+
+3. Create API routes
+
+4. Use GET to retrieve student records
+
+5. Use POST to add a new student
+
+6. Connect Express to PostgreSQL
+
+7. Insert data into PostgreSQL from an API
+
+8. Retrieve data from PostgreSQL through an API
+
+9. Understand req.body and res.json()
+
+Note: We will test the API directly using the browser for GET, and we will connect an HTML/JavaScript frontend for POST.
+
+
+
+
+What is an API?
+
+API means Application Programming Interface.
+
+An API is a communication bridge that allows one application to communicate with another application.
+
+For our project:
+
+Client / Frontend
+       ↓
+     API
+       ↓
+Node.js + Express
+       ↓
+ PostgreSQL
+
+
+For example:  when we want to create a student:
+
+Frontend POST data and saved the We use GET  to retrieve the data saved from server (database)
+
+
+On POSTGRESQL, Create this table in your database using sql query tool
+
+students table:
+
+# sql code:
+
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    age INTEGER,
+    course VARCHAR(100),
+    email VARCHAR(150)
+);
+
+
+and 
+
+INSERT INTO the data into students table manually:
+
+
+INSERT INTO students (name, age, course, email)
+VALUES
+('Amara Johnson', 12, 'JavaScript', 'amara@abc.com'),
+('Daniel Smith', 13, 'Node.js', 'daniel@abc.com');
+
+
+
+Note: 
+
+Node.js — is the JavaScript runtime
+Express — is the backend framework
+pg — is the PostgreSQL driver for PostgreSQL database
+
+
+A. Create the PostgreSQL Connection
+
+Create: db.js
+
+Put the code inside:
+
+// ========================================
+// POSTGRESQL DATABASE CONNECTION
+// ========================================
+
+const { Pool } = require("pg");
+
+const pool = new Pool({
+    user: "postgres",
+    host: "localhost",
+    database: "school_db",
+    password: "TOM",
+    port: 5432
+});
+
+module.exports = pool;
+
+
+
+
+B. Create the Express Server
+
+const express = require("express");
+const pool = require("./db");
+
+const app = express();
+
+// Allows Express to receive JSON data
+app.use(express.json());
+
+const PORT = 3000;
+
+
+
+C. Create the GET Route
+
+We want: GET /students
+
+to retrieve all students from PostgreSQL.
+
+Add this to app.js:
+
+
+The code:
+
+// ========================================
+// EXPRESS SERVER
+// ========================================
+
+const express = require("express");
+const pool = require("./db");
+
+const app = express();
+
+// Allow Express to receive JSON data
+app.use(express.json());
+
+const PORT = 3000;
+
+
+// ========================================
+// GET ALL STUDENTS
+// ========================================
+
+app.get("/students", async (req, res) => {
+    try {
+
+        // Get all students from PostgreSQL
+        const result = await pool.query(
+            "SELECT * FROM students ORDER BY id ASC"
+        );
+
+        res.json(result.rows);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            message: "Error retrieving students"
+        });
+    }
+});
+
+
+// ========================================
+// GET STUDENT BY ID
+// ========================================
+
+app.get("/students/:id", async (req, res) => {
+    try {
+
+        // Get the ID from the URL
+        const id = req.params.id;
+
+        // Search PostgreSQL for the student
+        const result = await pool.query(
+            "SELECT * FROM students WHERE id = $1",
+            [id]
+        );
+
+        // Check if student was found
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                message: "Student record not found"
+            });
+        }
+
+        // Send the student record
+        res.json(result.rows[0]);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            message: "Error searching for student"
+        });
+    }
+});
+
+
+// ========================================
+// START SERVER
+// ========================================
+
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
+
+
+
+Now start server: node app.js
+
+
+ii. Test GET in the Browser
+
+Open: http://localhost:3000/students and use there respective id
+if data inserted in database could be retrieved that mean all is working well
+
+
+
+
+10. Understanding POST
+
+POST is normally used when we want to create new data.
+
+We are using two files for post, the are: insert.js and index.html
+
+
+A. insert.js
+
+The code:
+
+// ========================================
+// INSERT SERVER
+// ========================================
+
+const express = require("express");
+const pool = require("./db");
+
+const app = express();
+
+
+// Allow Express to receive JSON
+app.use(express.json());
+
+// Serve files from the public folder
+app.use(express.static("public"));
+
+const PORT = 4000;
+
+
+// ========================================
+// TEST DATABASE CONNECTION
+// ========================================
+
+app.get("/test", async (req, res) => {
+    try {
+
+        const result = await pool.query("SELECT NOW()");
+
+        res.json({
+            message: "Insert server and PostgreSQL are connected",
+            time: result.rows[0]
+        });
+
+    } catch (error) {
+
+        console.error("DATABASE ERROR:", error.message);
+
+        res.status(500).json({
+            message: "Database connection failed",
+            error: error.message
+        });
+    }
+});
+
+
+// ========================================
+// POST STUDENT
+// ========================================
+
+app.post("/students", async (req, res) => {
+    try {
+
+        // Get student data from the form
+        const { name, age, course, email } = req.body;
+
+        console.log("Student received:", req.body);
+
+        // Insert student into PostgreSQL
+        const result = await pool.query(
+            `INSERT INTO students (name, age, course, email)
+             VALUES ($1, $2, $3, $4)
+             RETURNING *`,
+            [name, age, course, email]
+        );
+
+        console.log("Student inserted:", result.rows[0]);
+
+        res.status(201).json({
+            message: "Student record added successfully",
+            student: result.rows[0]
+        });
+
+    } catch (error) {
+
+        console.error("INSERT ERROR:", error.message);
+
+        res.status(500).json({
+            message: "Student was not inserted",
+            error: error.message
+        });
+    }
+});
+
+
+// ========================================
+// START SERVER
+// ========================================
+
+app.listen(PORT, () => {
+    console.log(`Insert server running at http://localhost:${PORT}`);
+});
+
+
+
+
+B. index.html
+
+The code:
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Student</title>
+</head>
+
+<body>
+
+    <h1>Add New Student</h1>
+
+    <form id="studentForm">
+
+        <label>Name</label>
+        <br>
+        <input type="text" id="name" required>
+
+        <br><br>
+
+        <label>Age</label>
+        <br>
+        <input type="number" id="age" required>
+
+        <br><br>
+
+        <label>Course</label>
+        <br>
+        <input type="text" id="course" required>
+
+        <br><br>
+
+        <label>Email</label>
+        <br>
+        <input type="email" id="email" required>
+
+        <br><br>
+
+        <button type="submit">Add Student</button>
+
+    </form>
+
+    <p id="message"></p>
+
+
+    <script>
+
+        const form = document.getElementById("studentForm");
+
+        form.addEventListener("submit", async function(event) {
+
+            // Stop the page from refreshing
+            event.preventDefault();
+
+
+            // Get the values from the form
+            const student = {
+
+                name: document.getElementById("name").value,
+
+                age: document.getElementById("age").value,
+
+                course: document.getElementById("course").value,
+
+                email: document.getElementById("email").value
+
+            };
+
+
+            // Send the student to Express
+            const response = await fetch("/students", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(student)
+
+            });
+
+
+            // Get the response from Express
+            const data = await response.json();
+
+
+            // Display the result
+            document.getElementById("message").textContent =
+                data.message;
+
+
+            // Clear the form if successful
+            if (response.ok) {
+                form.reset();
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

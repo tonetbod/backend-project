@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Student Login</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0f0c29,
+                    #302b63,
+                    #24243e
+                );
+
+            padding: 20px;
+
+        }
+
+
+        .login-container {
+
+            width: 100%;
+
+            max-width: 420px;
+
+        }
+
+
+        .header {
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+            color: white;
+
+        }
+
+
+        .header h1 {
+
+            font-size: 30px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .header p {
+
+            color: #cbd5e1;
+
+            font-size: 14px;
+
+        }
+
+
+        .card {
+
+            background: rgba(255, 255, 255, 0.10);
+
+            border: 1px solid
+                rgba(255, 255, 255, 0.20);
+
+            border-radius: 18px;
+
+            padding: 30px;
+
+            backdrop-filter: blur(15px);
+
+            box-shadow:
+                0 10px 35px
+                rgba(0, 0, 0, 0.30);
+
+        }
+
+
+        .field {
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .field label {
+
+            display: block;
+
+            color: #e2e8f0;
+
+            font-size: 14px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .field input {
+
+            width: 100%;
+
+            padding: 13px 15px;
+
+            border-radius: 9px;
+
+            border: 1px solid
+                rgba(255, 255, 255, 0.20);
+
+            background:
+                rgba(255, 255, 255, 0.08);
+
+            color: white;
+
+            font-size: 15px;
+
+            outline: none;
+
+        }
+
+
+        .field input::placeholder {
+
+            color: #94a3b8;
+
+        }
+
+
+        .field input:focus {
+
+            border-color: #8b5cf6;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(139, 92, 246, 0.20);
+
+        }
+
+
+        .login-btn {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #6d28d9
+                );
+
+            color: white;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+        }
+
+
+        .login-btn:hover {
+
+            opacity: 0.9;
+
+        }
+
+
+        .login-btn:disabled {
+
+            opacity: 0.5;
+
+            cursor: not-allowed;
+
+        }
+
+
+        .message {
+
+            display: none;
+
+            margin-top: 20px;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+        }
+
+
+        .message.success {
+
+            display: block;
+
+            background: rgba(16, 185, 129, 0.15);
+
+            border: 1px solid
+                rgba(16, 185, 129, 0.40);
+
+            color: #6ee7b7;
+
+        }
+
+
+        .message.error {
+
+            display: block;
+
+            background: rgba(239, 68, 68, 0.15);
+
+            border: 1px solid
+                rgba(239, 68, 68, 0.40);
+
+            color: #fca5a5;
+
+        }
+
+
+        .register-link {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #cbd5e1;
+
+            font-size: 14px;
+
+        }
+
+
+        .register-link a {
+
+            color: #a78bfa;
+
+            text-decoration: none;
+
+        }
+
+
+        .register-link a:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        .student-info {
+
+            display: none;
+
+            margin-top: 20px;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255, 255, 255, 0.08);
+
+            color: #e2e8f0;
+
+            line-height: 1.8;
+
+            font-size: 14px;
+
+        }
+
+
+        .student-info strong {
+
+            color: white;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="login-container">
+
+
+        <div class="header">
+
+            <h1>Student Login</h1>
+
+            <p>
+                Login using your registered email address
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+
+            <form id="loginForm">
+
+
+                <div class="field">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="student@example.com"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                    id="loginBtn"
+                >
+                    Login
+                </button>
+
+
+            </form>
+
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+
+            <div
+                id="studentInfo"
+                class="student-info"
+            ></div>
+
+
+            <div class="register-link">
+
+                Don't have an account?
+
+                <a href="/">
+                    Register here
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <script src="login.js"></script>
+
+
+</body>
+
+</html>

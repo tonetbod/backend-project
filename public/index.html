@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Student Records</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+
+            --glass-bg: rgba(255, 255, 255, 0.10);
+            --glass-border: rgba(255, 255, 255, 0.22);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+
+            --input-bg: rgba(255, 255, 255, 0.07);
+            --input-border: rgba(255, 255, 255, 0.18);
+            --input-focus: rgba(139, 92, 246, 0.6);
+
+            --accent: #8b5cf6;
+            --accent-light: #a78bfa;
+            --accent-glow: rgba(139, 92, 246, 0.35);
+
+            --text-primary: #f1f5f9;
+            --text-secondary: rgba(241, 245, 249, 0.60);
+
+            --success-bg: rgba(16, 185, 129, 0.15);
+            --success-border: rgba(16, 185, 129, 0.40);
+            --success-text: #6ee7b7;
+
+            --error-bg: rgba(239, 68, 68, 0.15);
+            --error-border: rgba(239, 68, 68, 0.40);
+            --error-text: #fca5a5;
+        }
+
+
+        /* ==============================
+           BODY
+        ============================== */
+
+        body {
+
+            font-family: 'Inter', sans-serif;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 1.5rem;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0f0c29 0%,
+                    #302b63 45%,
+                    #24243e 100%
+                );
+
+            position: relative;
+
+            overflow-x: hidden;
+        }
+
+
+        /* ==============================
+           AMBIENT ORBS
+        ============================== */
+
+        body::before,
+        body::after {
+
+            content: '';
+
+            position: fixed;
+
+            border-radius: 50%;
+
+            filter: blur(80px);
+
+            pointer-events: none;
+
+            z-index: 0;
+        }
+
+
+        body::before {
+
+            width: min(500px, 60vw);
+
+            height: min(500px, 60vw);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(139, 92, 246, 0.30) 0%,
+                    transparent 70%
+                );
+
+            top: -10%;
+
+            right: -10%;
+        }
+
+
+        body::after {
+
+            width: min(400px, 50vw);
+
+            height: min(400px, 50vw);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(59, 130, 246, 0.20) 0%,
+                    transparent 70%
+                );
+
+            bottom: -10%;
+
+            left: -10%;
+        }
+
+
+        /* ==============================
+           PAGE WRAPPER
+        ============================== */
+
+        .page-wrapper {
+
+            width: 100%;
+
+            max-width: 480px;
+
+            position: relative;
+
+            z-index: 1;
+        }
+
+
+        /* ==============================
+           HEADER
+        ============================== */
+
+        .page-header {
+
+            text-align: center;
+
+            margin-bottom: 2rem;
+        }
+
+
+        .page-header .eyebrow {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 0.5rem;
+
+            background:
+                rgba(139, 92, 246, 0.15);
+
+            border:
+                1px solid rgba(139, 92, 246, 0.30);
+
+            border-radius: 100px;
+
+            padding: 0.3rem 0.85rem;
+
+            font-size: 0.72rem;
+
+            font-weight: 500;
+
+            letter-spacing: 0.06em;
+
+            color: var(--accent-light);
+
+            margin-bottom: 1rem;
+
+            text-transform: uppercase;
+        }
+
+
+        .page-header h1 {
+
+            font-size:
+                clamp(1.6rem, 5vw, 2.1rem);
+
+            font-weight: 600;
+
+            color: var(--text-primary);
+
+            line-height: 1.2;
+        }
+
+
+        .page-header p {
+
+            margin-top: 0.5rem;
+
+            font-size: 0.9rem;
+
+            color: var(--text-secondary);
+
+            font-weight: 300;
+        }
+
+
+        /* ==============================
+           GLASS CARD
+        ============================== */
+
+        .card {
+
+            background: var(--glass-bg);
+
+            border: 1px solid var(--glass-border);
+
+            border-radius: 20px;
+
+            backdrop-filter: blur(20px);
+
+            -webkit-backdrop-filter: blur(20px);
+
+            box-shadow:
+                var(--glass-shadow),
+                inset 0 1px 0 rgba(255,255,255,0.12);
+
+            padding:
+                clamp(1.5rem, 5vw, 2.25rem);
+        }
+
+
+        /* ==============================
+           FORM FIELDS
+        ============================== */
+
+        .field-group {
+
+            display: grid;
+
+            gap: 1.1rem;
+        }
+
+
+        .field {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 0.45rem;
+        }
+
+
+        .field label {
+
+            font-size: 0.78rem;
+
+            font-weight: 500;
+
+            color: var(--text-secondary);
+
+            letter-spacing: 0.02em;
+        }
+
+
+        .field input,
+        .field select {
+
+            width: 100%;
+
+            padding: 0.75rem 1rem;
+
+            background: var(--input-bg);
+
+            border:
+                1px solid var(--input-border);
+
+            border-radius: 10px;
+
+            color: var(--text-primary);
+
+            font-family: inherit;
+
+            font-size: 0.92rem;
+
+            font-weight: 400;
+
+            outline: none;
+
+            transition:
+                border-color 0.2s,
+                box-shadow 0.2s,
+                background 0.2s;
+
+            -webkit-appearance: none;
+
+            appearance: none;
+        }
+
+
+        .field select {
+
+            background-image:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a78bfa' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+
+            background-repeat: no-repeat;
+
+            background-position:
+                right 1rem center;
+
+            padding-right: 2.5rem;
+
+            cursor: pointer;
+        }
+
+
+        .field select option {
+
+            background: #302b63;
+
+            color: var(--text-primary);
+        }
+
+
+        .field input::placeholder {
+
+            color:
+                rgba(241, 245, 249, 0.30);
+        }
+
+
+        .field input:focus,
+        .field select:focus {
+
+            border-color:
+                var(--input-focus);
+
+            background:
+                rgba(139, 92, 246, 0.08);
+
+            box-shadow:
+                0 0 0 3px var(--accent-glow);
+        }
+
+
+        /* ==============================
+           TWO COLUMN ROW
+        ============================== */
+
+        .field-row {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 1rem;
+        }
+
+
+        /* ==============================
+           DIVIDER
+        ============================== */
+
+        .divider {
+
+            height: 1px;
+
+            background:
+                var(--glass-border);
+
+            margin:
+                0.5rem 0;
+        }
+
+
+        /* ==============================
+           SUBMIT BUTTON
+        ============================== */
+
+        .btn-submit {
+
+            width: 100%;
+
+            margin-top: 0.4rem;
+
+            padding: 0.85rem 1rem;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed 0%,
+                    #6d28d9 100%
+                );
+
+            border:
+                1px solid rgba(139, 92, 246, 0.50);
+
+            border-radius: 10px;
+
+            color: #fff;
+
+            font-family: inherit;
+
+            font-size: 0.95rem;
+
+            font-weight: 500;
+
+            cursor: pointer;
+
+            transition:
+                opacity 0.2s,
+                transform 0.15s,
+                box-shadow 0.2s;
+
+            box-shadow:
+                0 4px 20px
+                rgba(124, 58, 237, 0.40);
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .btn-submit::after {
+
+            content: '';
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(255,255,255,0.10) 0%,
+                    transparent 100%
+                );
+
+            pointer-events: none;
+        }
+
+
+        .btn-submit:hover:not(:disabled) {
+
+            opacity: 0.92;
+
+            box-shadow:
+                0 6px 28px
+                rgba(124, 58, 237, 0.55);
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        .btn-submit:active:not(:disabled) {
+
+            transform:
+                translateY(0);
+        }
+
+
+        .btn-submit:disabled {
+
+            opacity: 0.5;
+
+            cursor: not-allowed;
+        }
+
+
+        /* ==============================
+           LOGIN LINK
+        ============================== */
+
+        .login-link {
+
+            text-align: center;
+
+            margin-top: 1.25rem;
+
+            font-size: 0.85rem;
+
+            color: var(--text-secondary);
+        }
+
+
+        .login-link a {
+
+            color: var(--accent-light);
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+            transition: color 0.2s;
+        }
+
+
+        .login-link a:hover {
+
+            color: #c4b5fd;
+
+            text-decoration: underline;
+        }
+
+
+        /* ==============================
+           TOAST
+        ============================== */
+
+        .toast {
+
+            display: none;
+
+            align-items: flex-start;
+
+            gap: 0.75rem;
+
+            padding: 0.9rem 1.1rem;
+
+            border-radius: 10px;
+
+            font-size: 0.85rem;
+
+            line-height: 1.45;
+
+            margin-top: 1rem;
+
+            animation:
+                slideIn 0.25s ease;
+        }
+
+
+        .toast.show {
+
+            display: flex;
+        }
+
+
+        .toast.success {
+
+            background:
+                var(--success-bg);
+
+            border:
+                1px solid var(--success-border);
+
+            color:
+                var(--success-text);
+        }
+
+
+        .toast.error {
+
+            background:
+                var(--error-bg);
+
+            border:
+                1px solid var(--error-border);
+
+            color:
+                var(--error-text);
+        }
+
+
+        .toast-icon {
+
+            font-size: 1rem;
+
+            flex-shrink: 0;
+
+            margin-top: 0.05rem;
+        }
+
+
+        @keyframes slideIn {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(6px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        /* ==============================
+           SPINNER
+        ============================== */
+
+        .spinner {
+
+            display: inline-block;
+
+            width: 14px;
+
+            height: 14px;
+
+            border:
+                2px solid
+                rgba(255,255,255,0.30);
+
+            border-top-color: #fff;
+
+            border-radius: 50%;
+
+            animation:
+                spin 0.7s linear infinite;
+
+            vertical-align: middle;
+
+            margin-right: 6px;
+        }
+
+
+        @keyframes spin {
+
+            to {
+
+                transform:
+                    rotate(360deg);
+            }
+        }
+
+
+        /* ==============================
+           FOOTER
+        ============================== */
+
+        .card-footer {
+
+            text-align: center;
+
+            margin-top: 1.25rem;
+
+            font-size: 0.75rem;
+
+            color: var(--text-secondary);
+        }
+
+
+        /* ==============================
+           RESPONSIVE
+        ============================== */
+
+        @media (max-width: 360px) {
+
+            .field-row {
+
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page-wrapper">
+
+
+    <!-- ==============================
+         HEADER
+    ============================== -->
+
+    <div class="page-header">
+
+        <span class="eyebrow">
+
+            <svg
+                width="10"
+                height="10"
+                viewBox="0 0 10 10"
+                fill="none"
+            >
+
+                <circle
+                    cx="5"
+                    cy="5"
+                    r="4"
+                    fill="#8b5cf6"
+                />
+
+            </svg>
+
+            Student Portal
+
+        </span>
+
+
+        <h1>
+            Register a Student
+        </h1>
+
+
+        <p>
+            Fill in the details below to add a new record.
+        </p>
+
+    </div>
+
+
+    <!-- ==============================
+         REGISTRATION CARD
+    ============================== -->
+
+    <div class="card">
+
+        <div class="field-group">
+
+
+            <!-- FULL NAME -->
+
+            <div class="field">
+
+                <label for="name">
+                    Full Name
+                </label>
+
+                <input
+                    id="name"
+                    type="text"
+                    placeholder="e.g. Ada Lovelace"
+                    autocomplete="name"
+                >
+
+            </div>
+
+
+            <!-- AGE + COURSE -->
+
+            <div class="field-row">
+
+
+                <div class="field">
+
+                    <label for="age">
+                        Age
+                    </label>
+
+                    <input
+                        id="age"
+                        type="number"
+                        placeholder="18"
+                        min="10"
+                        max="99"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="course">
+                        Course
+                    </label>
+
+                    <select id="course">
+
+                        <option
+                            value=""
+                            disabled
+                            selected
+                        >
+                            Select course
+                        </option>
+
+                        <option>
+                            Computer Science
+                        </option>
+
+                        <option>
+                            Information Technology
+                        </option>
+
+                        <option>
+                            Data Science
+                        </option>
+
+                        <option>
+                            Software Engineering
+                        </option>
+
+                        <option>
+                            Cybersecurity
+                        </option>
+
+                        <option>
+                            Business Administration
+                        </option>
+
+                        <option>
+                            Mathematics
+                        </option>
+
+                        <option>
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="field">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                    id="email"
+                    type="email"
+                    placeholder="ada@university.edu"
+                    autocomplete="email"
+                >
+
+            </div>
+
+
+            <div class="divider"></div>
+
+
+            <!-- REGISTER BUTTON -->
+
+            <button
+                class="btn-submit"
+                id="submitBtn"
+                onclick="submitStudent()"
+            >
+                Add Student Record
+            </button>
+
+
+            <!-- TOAST -->
+
+            <div
+                class="toast"
+                id="toast"
+            >
+
+                <span
+                    class="toast-icon"
+                    id="toastIcon"
+                ></span>
+
+                <span
+                    id="toastMsg"
+                ></span>
+
+            </div>
+
+
+            <!-- ==============================
+                 LOGIN LINK
+            ============================== -->
+
+            <div class="login-link">
+
+                Already registered?
+
+                <a href="/login.html">
+                    Login here
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="card-footer">
+
+        Connected to PostgreSQL via Express · Port 3000
+
+    </div>
+
+
+</div>
+
+
+<!-- ==============================
+     JAVASCRIPT
+============================== -->
+
+<script>
+
+
+    // ========================================
+    // SUBMIT STUDENT
+    // ========================================
+
+    async function submitStudent() {
+
+        const btn =
+            document.getElementById('submitBtn');
+
+        const toast =
+            document.getElementById('toast');
+
+
+        const name =
+            document.getElementById('name')
+                .value
+                .trim();
+
+
+        const age =
+            document.getElementById('age')
+                .value
+                .trim();
+
+
+        const course =
+            document.getElementById('course')
+                .value;
+
+
+        const email =
+            document.getElementById('email')
+                .value
+                .trim();
+
+
+        // Hide previous toast
+
+        toast.className = 'toast';
+
+
+        // Check fields
+
+        if (
+            !name ||
+            !age ||
+            !course ||
+            !email
+        ) {
+
+            showToast(
+                'error',
+                '⚠️',
+                'Please fill in all fields before submitting.'
+            );
+
+            return;
+        }
+
+
+        // Disable button
+
+        btn.disabled = true;
+
+        btn.innerHTML =
+            '<span class="spinner"></span>Saving…';
+
+
+        try {
+
+
+            // Send data to Express
+
+            const res =
+                await fetch('/students', {
+
+                    method: 'POST',
+
+                    headers: {
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body: JSON.stringify({
+
+                        name: name,
+
+                        age: parseInt(age),
+
+                        course: course,
+
+                        email: email
+
+                    })
+
+                });
+
+
+            // Convert response to JSON
+
+            const data =
+                await res.json();
+
+
+            // ========================================
+            // SUCCESS
+            // ========================================
+
+            if (res.ok) {
+
+                showToast(
+                    'success',
+                    '✓',
+                    `${data.student?.name || name} was added successfully.`
+                );
+
+                clearForm();
+
+            }
+
+
+            // ========================================
+            // ERROR
+            // ========================================
+
+            else {
+
+                showToast(
+                    'error',
+                    '✕',
+                    data.message ||
+                    'Something went wrong. Please try again.'
+                );
+
+            }
+
+
+        } catch (err) {
+
+            console.error(err);
+
+            showToast(
+                'error',
+                '✕',
+                'Could not reach the server. Check your connection.'
+            );
+
+        } finally {
+
+            btn.disabled = false;
+
+            btn.innerHTML =
+                'Add Student Record';
+
+        }
+
+    }
+
+
+    // ========================================
+    // SHOW TOAST
+    // ========================================
+
+    function showToast(
+        type,
+        icon,
+        msg
+    ) {
+
+        const toast =
+            document.getElementById('toast');
+
+
+        document.getElementById(
+            'toastIcon'
+        ).textContent = icon;
+
+
+        document.getElementById(
+            'toastMsg'
+        ).textContent = msg;
+
+
+        toast.className =
+            `toast show ${type}`;
+
+    }
+
+
+    // ========================================
+    // CLEAR FORM
+    // ========================================
+
+    function clearForm() {
+
+        [
+            'name',
+            'age',
+            'email'
+        ].forEach(id => {
+
+            document.getElementById(id)
+                .value = '';
+
+        });
+
+
+        document.getElementById(
+            'course'
+        ).selectedIndex = 0;
+
+    }
+
+
+    // ========================================
+    // ENTER KEY
+    // ========================================
+
+    document.addEventListener(
+        'keydown',
+        e => {
+
+            if (e.key === 'Enter') {
+
+                submitStudent();
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>
+

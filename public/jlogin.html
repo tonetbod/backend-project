@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="jstyle.css">
+</head>
+
+<body>
+
+  <div class="box">
+    <h2>Login</h2>
+
+    <form id="jform">
+      <input id="email" type="email" placeholder="Email" required>
+
+      <input id="password" type="password" placeholder="Password" required>
+
+      <button type="submit">Login</button>
+    </form>
+
+    <p id="msg"></p>
+
+    <a href="/jreg.html">Create an account</a>
+  </div>
+
+<script>
+document.getElementById("jform").onsubmit = async (e) => {
+  e.preventDefault();
+
+  const res = await fetch("/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: email.value,
+      password: password.value
+    })
+  });
+
+  const result = await res.json();
+
+  if (res.ok) {
+    localStorage.setItem("token", result.token);
+
+    msg.textContent = "Login successful!";
+
+    setTimeout(() => {
+      location.href = "/profile.html";
+    }, 500);
+
+  } else {
+    msg.textContent = result.error;
+  }
+};
+</script>
+
+</body>
+</html>

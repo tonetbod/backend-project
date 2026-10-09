@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Update Student</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0f0c29,
+                    #302b63,
+                    #24243e
+                );
+
+            padding: 20px;
+
+        }
+
+
+        .container {
+
+            width: 100%;
+
+            max-width: 500px;
+
+        }
+
+
+        .header {
+
+            text-align: center;
+
+            color: white;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .header h1 {
+
+            font-size: 30px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .header p {
+
+            color: #cbd5e1;
+
+            font-size: 14px;
+
+        }
+
+
+        .card {
+
+            background: rgba(255, 255, 255, 0.10);
+
+            border: 1px solid
+                rgba(255, 255, 255, 0.20);
+
+            border-radius: 18px;
+
+            padding: 30px;
+
+            backdrop-filter: blur(15px);
+
+            box-shadow:
+                0 10px 35px
+                rgba(0, 0, 0, 0.30);
+
+        }
+
+
+        .field {
+
+            margin-bottom: 18px;
+
+        }
+
+
+        label {
+
+            display: block;
+
+            color: #e2e8f0;
+
+            font-size: 14px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        input,
+        select {
+
+            width: 100%;
+
+            padding: 13px 15px;
+
+            border-radius: 9px;
+
+            border: 1px solid
+                rgba(255, 255, 255, 0.20);
+
+            background:
+                rgba(255, 255, 255, 0.08);
+
+            color: white;
+
+            font-size: 15px;
+
+            outline: none;
+
+        }
+
+
+        input:focus,
+        select:focus {
+
+            border-color: #8b5cf6;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(139, 92, 246, 0.20);
+
+        }
+
+
+        input::placeholder {
+
+            color: #94a3b8;
+
+        }
+
+
+        select option {
+
+            background: #302b63;
+
+            color: white;
+
+        }
+
+
+        .id-section {
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .id-section input {
+
+            flex: 1;
+
+        }
+
+
+        .find-btn {
+
+            padding: 0 20px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #475569;
+
+            color: white;
+
+            cursor: pointer;
+
+        }
+
+
+        .find-btn:hover {
+
+            background: #64748b;
+
+        }
+
+
+        .update-btn {
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 5px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #6d28d9
+                );
+
+            color: white;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+        }
+
+
+        .update-btn:hover {
+
+            opacity: 0.9;
+
+        }
+
+
+        .update-btn:disabled {
+
+            opacity: 0.5;
+
+            cursor: not-allowed;
+
+        }
+
+
+        .message {
+
+            display: none;
+
+            margin-top: 20px;
+
+            padding: 13px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+        }
+
+
+        .message.success {
+
+            display: block;
+
+            background:
+                rgba(16, 185, 129, 0.15);
+
+            border: 1px solid
+                rgba(16, 185, 129, 0.40);
+
+            color: #6ee7b7;
+
+        }
+
+
+        .message.error {
+
+            display: block;
+
+            background:
+                rgba(239, 68, 68, 0.15);
+
+            border: 1px solid
+                rgba(239, 68, 68, 0.40);
+
+            color: #fca5a5;
+
+        }
+
+
+        .hidden {
+
+            display: none;
+
+        }
+
+
+        .links {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            font-size: 14px;
+
+        }
+
+
+        .links a {
+
+            color: #a78bfa;
+
+            text-decoration: none;
+
+            margin: 0 8px;
+
+        }
+
+
+        .links a:hover {
+
+            text-decoration: underline;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <div class="header">
+
+        <h1>Update Student</h1>
+
+        <p>
+            Search for a student and edit their information
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+
+        <!-- ========================================
+             STUDENT ID SEARCH
+        ========================================= -->
+
+        <div class="field">
+
+            <label for="studentId">
+                Student ID
+            </label>
+
+
+            <div class="id-section">
+
+                <input
+                    type="number"
+                    id="studentId"
+                    placeholder="Enter student ID"
+                    min="1"
+                >
+
+
+                <button
+                    type="button"
+                    class="find-btn"
+                    onclick="findStudent()"
+                >
+                    Find
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================================
+             UPDATE FORM
+        ========================================= -->
+
+        <form
+            id="updateForm"
+            class="hidden"
+        >
+
+
+            <div class="field">
+
+                <label for="name">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter full name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="age">
+                    Age
+                </label>
+
+                <input
+                    type="number"
+                    id="age"
+                    placeholder="Enter age"
+                    min="1"
+                    required
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="course">
+                    Course
+                </label>
+
+                <select id="course" required>
+
+                    <option value="">
+                        Select course
+                    </option>
+
+                    <option>
+                        Computer Science
+                    </option>
+
+                    <option>
+                        Information Technology
+                    </option>
+
+                    <option>
+                        Data Science
+                    </option>
+
+                    <option>
+                        Software Engineering
+                    </option>
+
+                    <option>
+                        Cybersecurity
+                    </option>
+
+                    <option>
+                        Business Administration
+                    </option>
+
+                    <option>
+                        Mathematics
+                    </option>
+
+                    <option>
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter email"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="update-btn"
+                id="updateBtn"
+            >
+                Update Student
+            </button>
+
+
+        </form>
+
+
+        <!-- ========================================
+             MESSAGE
+        ========================================= -->
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+
+        <!-- ========================================
+             NAVIGATION
+        ========================================= -->
+
+        <div class="links">
+
+            <a href="/">
+                Register
+            </a>
+
+            <a href="/login.html">
+                Login
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script src="update.js"></script>
+
+
+</body>
+
+</html>
